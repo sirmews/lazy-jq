@@ -6,7 +6,7 @@ from langchain import PromptTemplate
 from langchain.callbacks import get_openai_callback
 from langchain.chains import LLMChain
 from langchain.llms import OpenAI
-from typer import Argument, Option, Typer
+from typer import Argument, Option, Typer, style
 
 load_dotenv()
 
@@ -16,8 +16,12 @@ def count_tokens(chain, query, show_tokens: bool):
     with get_openai_callback() as cb:
         result = chain.run(query)
         if show_tokens:
-            print(f'Spent a total of {cb.total_tokens} tokens')
+            token_count_message = f'Spent a total of {cb.total_tokens} tokens'
+            print(style(token_count_message, fg="yellow"))
     return result
+
+def display_output(output: str):
+    print(style(output, fg="green"))
 
 @app.command()
 def generate_script(text: str = Argument(..., help="The text used to generate the bash script."),
@@ -41,7 +45,7 @@ def generate_script(text: str = Argument(..., help="The text used to generate th
 
     chain = LLMChain(prompt=prompt, llm=llm, verbose=False)
     response = count_tokens(chain, {'question': text}, show_tokens)
-    print(response)
+    display_output(response)
 
 if __name__ == "__main__":
     app()
