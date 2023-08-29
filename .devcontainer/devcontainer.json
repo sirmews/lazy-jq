@@ -29,5 +29,9 @@
 	},
 	"mounts": [
 		"source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
-	]
+	],
+	"runArgs": [
+		"--env-file",
+		"${localWorkspaceFolder}/.env"
+	],
 }
