@@ -3,17 +3,25 @@ import os
 import openai
 from dotenv import load_dotenv
 from langchain import PromptTemplate
+from langchain.callbacks import get_openai_callback
 from langchain.chains import LLMChain
 from langchain.llms import OpenAI
-from typer import Argument, Typer
+from typer import Argument, Option, Typer
 
 load_dotenv()
 
 app = Typer()
 
+def count_tokens(chain, query, show_tokens: bool):
+    with get_openai_callback() as cb:
+        result = chain.run(query)
+        if show_tokens:
+            print(f'Spent a total of {cb.total_tokens} tokens')
+    return result
 
 @app.command()
-def generate_script(text: str = Argument(..., help="The text used to generate the bash script.")):
+def generate_script(text: str = Argument(..., help="The text used to generate the bash script."),
+                     show_tokens: bool = Option(False, help="Display the number of tokens used.")):
     template = """
     You are a general purpose tool that parses input and generates output that can be 
     piped into command line tools, such as awk, sed, grep, etc.
@@ -32,7 +40,8 @@ def generate_script(text: str = Argument(..., help="The text used to generate th
     llm = OpenAI(openai_api_key=api_key, temperature=0)
 
     chain = LLMChain(prompt=prompt, llm=llm, verbose=False)
-    print(chain.run(text))
+    response = count_tokens(chain, {'question': text}, show_tokens)
+    print(response)
 
 if __name__ == "__main__":
     app()
