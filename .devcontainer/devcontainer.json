@@ -1,0 +1,33 @@
+{
+	"name": "Lazy JQ",
+	"dockerFile": "../Dockerfile",
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/sshd:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"GitHub.copilot-labs",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"ms-python.isort",
+				"ms-python.vscode-pylance",
+				"ms-azuretools.vscode-docker",
+				"ms-python.autopep8"
+			],
+			"git.path": "/usr/bin/git",
+			"python.testing.unittestEnabled": false,
+			"python.testing.pytestEnabled": true,
+			"python.formatting.provider": "black",
+			"python.linting.mypyEnabled": true,
+			"python.linting.enabled": true,
+			"editor.defaultFormatter": "ms-python.autopep8",
+		}
+	},
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
+	]
+}
