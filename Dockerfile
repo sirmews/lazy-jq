@@ -11,5 +11,4 @@ RUN pip install --upgrade pip
 # Install the required packages from requirements.txt
 RUN pip install langchain openai python-dotenv "typer[all]"
 
-# Run the application
-CMD ["python", "cli.py", "hello", "Docker"]
+ENTRYPOINT ["python", "cli.py"]
